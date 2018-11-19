@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dynamic Load</title>
+    
+    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    <script type="text/javascript">
+        var vizList = ["https://public.tableau.com/views/HieraricialComparision/Story1?:embed=y&:display_count=yes","https://public.tableau.com/views/Oplymics/ImportanceofSportsInOlympics?:embed=y&:display_count=yes&publish=yes","https://public.tableau.com/views/HieraricialComparision/Story2?:embed=y&:display_count=yes"];
+        
+        var viz,
+            vizLen = vizList.length,
+            vizCount = 0;
+        
+        function createViz(vizPlusMinus) {
+            var vizDiv = document.getElementById("vizContainer"),
+                options = {
+                    hideTabs: true
+                };
+            vizCount = vizCount + vizPlusMinus;
+            
+            if (vizCount >= vizLen) { 
+            // Keep the vizCount in the bounds of the array index.
+                vizCount = 0;
+            } else if (vizCount < 0) {
+                vizCount = vizLen - 1;
+            }
+            
+            if (viz) { // If a viz object exists, delete it.
+                viz.dispose();
+            }
+            var vizURL = vizList[vizCount];
+            viz = new tableau.Viz(vizDiv, vizURL, options); 
+        }
+    </script>
+</head>
+
+<body onload="createViz(0);">
+    <div id="controls" style="padding:20px;">
+        <button style="width:100px;" onclick="javascript:createViz(-1);">Previous</button>
+        <button style="width:100px;" onclick="javascript:createViz(1);">Next</button>
+    </div>
+    <div id="vizContainer" style="width:800px; height:700px;"></div>
+</body>
+
+</html>
